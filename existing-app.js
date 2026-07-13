@@ -106,7 +106,10 @@ function legacySidebar() {
   return `<aside class="sidebar legacy-sidebar">
     <a class="brand legacy-brand" href="existing-tools.html"><span class="legacy-logo">${legacyIcon("sparkles", 19)}</span><span>360AI企业知识库</span></a>
     <button class="global-search legacy-search" type="button">${legacyIcon("search", 16)}<span>搜索</span><kbd>⌘ K</kbd></button>
-    <div class="side-actions"><button class="side-action" type="button">${legacyIcon("plus", 18)} 新建</button><button class="side-action" type="button">${legacyIcon("upload", 18)} 添加</button></div>
+    <div class="side-actions">
+      <button class="side-action" type="button"><span class="side-action-content">${legacyIcon("plus", 18)}<span class="side-action-label">新建</span></span></button>
+      <button class="side-action" type="button"><span class="side-action-content">${legacyIcon("upload", 18)}<span class="side-action-label">添加</span></span></button>
+    </div>
     <nav class="side-nav">
       <a class="side-link" href="../Cloud Docs Redesign v4 Autoplan.html">${legacyIcon("message-square-more")} 问AI</a>
       <div class="side-label">知识库</div>

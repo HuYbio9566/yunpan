@@ -209,6 +209,34 @@ button:disabled { cursor: not-allowed; opacity: 0.5; }
 .product-sidebar .side-action svg { width: 18px; height: 18px; }
 .product-sidebar .side-link svg { width: 18px; height: 18px; flex: 0 0 18px; }
 
+.legacy-sidebar .side-action {
+  display: grid;
+  place-items: center;
+  padding: 0 11px;
+  line-height: 1;
+}
+
+.legacy-sidebar .side-action-content {
+  display: inline-grid;
+  grid-template-columns: 18px max-content;
+  column-gap: 7px;
+  align-items: center;
+  line-height: 18px;
+}
+
+.legacy-sidebar .side-action-content svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  transform: translateY(1px);
+}
+
+.legacy-sidebar .side-action-label {
+  display: block;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
 .product-account-actions {
   display: flex;
   gap: 11px;
