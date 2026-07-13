@@ -9,13 +9,76 @@ const TOOL_ORDER = [
   "knowledge-import"
 ];
 
+const TRUSTED_P0 = [
+  "folder-summary",
+  "multi-file-qa",
+  "invoice-check"
+];
+
+const WORKBENCH_META = {
+  "folder-summary": {
+    category: "common",
+    categoryLabel: "通用云盘",
+    stage: "P0 · 高频入口",
+    outcome: "把一个持续更新的项目文件夹，变成带来源的重点、待办、风险和增量变化报告。",
+    flow: ["选择文件夹", "核对覆盖与权限", "保存可信摘要"],
+    trust: ["来源定位", "局部失败", "增量更新"]
+  },
+  "multi-file-qa": {
+    category: "common",
+    categoryLabel: "通用云盘",
+    stage: "P0 · 可信问答",
+    outcome: "先锁定已授权来源，再生成能定位到原文、识别冲突并拒绝无依据结论的回答。",
+    flow: ["确认来源范围", "检索并校验引用", "生成可交付文稿"],
+    trust: ["权限过滤", "引用证据", "冲突复核"]
+  },
+  "invoice-check": {
+    category: "finance",
+    categoryLabel: "财务行业包",
+    stage: "P0 · 商业验证",
+    outcome: "批量完成 OCR、材料匹配和企业规则校验，只把重复、缺失与金额异常交给财务。",
+    flow: ["导入核验批次", "自动识别与匹配", "人工处理异常"],
+    trust: ["规则版本", "字段复核", "审核留痕"]
+  },
+  "contract-review": {
+    category: "legal",
+    categoryLabel: "法务行业包",
+    stage: "P1 · 企业扩展",
+    outcome: "按企业 Playbook 标记合同风险，保留原文、规则依据和红线决策。"
+  },
+  "version-compare": {
+    category: "legal",
+    categoryLabel: "法务与协作",
+    stage: "P1 · 企业扩展",
+    outcome: "从文字差异升级为责任、语义和风险变化，并保留逐项合并决定。"
+  },
+  "knowledge-import": {
+    category: "governance",
+    categoryLabel: "知识治理",
+    stage: "P1 · 沉淀闭环",
+    outcome: "识别高价值资料，处理重复、权限、负责人和复核周期后再发布。"
+  },
+  "courseware-organizer": {
+    category: "education",
+    categoryLabel: "教育行业包",
+    stage: "P2 · 行业验证",
+    outcome: "按学科、教材和课时整理散落资源，并检查答案、版本和资料缺口。"
+  },
+  "lesson-plan": {
+    category: "education",
+    categoryLabel: "教育行业包",
+    stage: "P2 · 行业验证",
+    outcome: "基于课件和课标生成结构化教案，校验课时并要求教师最终确认。"
+  }
+};
+
 const TOOLS = {
   "folder-summary": {
     file: "folder-summary.html",
     icon: "摘",
     name: "文件夹智能摘要",
     desc: "批量理解文件夹内的资料，输出主题、重点文件、待办、风险和入库建议。",
-    tier: "专业版核心",
+    tier: "专业版",
     scene: "云盘增强",
     tags: ["文件夹级", "批量摘要", "来源可追溯"],
     accept: ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.png,.jpg,.jpeg,.zip",
@@ -55,7 +118,7 @@ const TOOLS = {
     icon: "问",
     name: "多文件问答",
     desc: "选择多个文件直接提问，回答仅基于有权限的来源并精确标注页码。",
-    tier: "专业版核心",
+    tier: "专业版",
     scene: "可信问答",
     tags: ["多文件", "引用回答", "权限过滤"],
     accept: ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md",
@@ -87,7 +150,7 @@ const TOOLS = {
     icon: "票",
     name: "财务票据识别与核验",
     desc: "自动识别票据字段，匹配报销单和审批规则，发现重复、缺失与金额异常。",
-    tier: "企业版核心",
+    tier: "企业版",
     scene: "财务自动化",
     tags: ["票据 OCR", "字段核验", "异常检测"],
     accept: ".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx",
@@ -188,7 +251,7 @@ const TOOLS = {
     icon: "课",
     name: "课件整理工具",
     desc: "识别学科、年级、章节和知识点，将散落课件整理成可复用的课程资料包。",
-    tier: "教育行业包核心",
+    tier: "教育行业包",
     scene: "教育资料管理",
     tags: ["课件归类", "知识点标签", "课程包"],
     accept: ".pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg",
@@ -326,13 +389,13 @@ function renderShell(tool) {
       ${renderProductSidebar()}
       <main class="main">
         <header class="topbar">
-          <div class="breadcrumb"><a href="index.html">AI 工具中心</a><span>/</span><strong>${tool.name}</strong></div>
+          <div class="breadcrumb"><a href="index.html">文件工作台</a><span>/</span><strong>${tool.name}</strong></div>
           ${primaryNav("experience")}
           <div class="top-actions"><button class="btn" data-action="history">处理记录</button><button class="btn primary" data-action="help">使用帮助</button></div>
         </header>
         <div class="tool-tabs-wrap"><nav class="tool-tabs">${tabs}</nav></div>
         <div class="content">
-          <div class="demo-banner"><strong>可交互体验版</strong><span>可上传本地文件并体验完整流程；AI 结果为演示数据，生产上线时替换为真实解析与模型接口。</span></div>
+          <div class="demo-banner"><strong>可交互体验版</strong><span>可上传本地文件并体验完整流程；处理结果为演示数据，生产上线时替换为真实解析与模型接口。</span></div>
           <section class="tool-hero">
             <div class="tool-heading"><div class="tool-icon-large">${tool.icon}</div><div><h1>${tool.name}</h1><p>${tool.desc}</p></div></div>
             <div class="hero-tags"><span class="tag purple">${tool.tier}</span><span class="tag blue">${tool.scene}</span>${tool.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
@@ -340,7 +403,7 @@ function renderShell(tool) {
           <div class="stepper" id="stepper">
             <div class="step active" data-step="1"><span class="step-number">1</span><div><b>添加文件</b><span>本地或云盘资料</span></div></div>
             <div class="step" data-step="2"><span class="step-number">2</span><div><b>配置任务</b><span>选择处理规则</span></div></div>
-            <div class="step" data-step="3"><span class="step-number">3</span><div><b>AI 处理</b><span>解析、匹配与分析</span></div></div>
+            <div class="step" data-step="3"><span class="step-number">3</span><div><b>执行处理</b><span>解析、匹配与分析</span></div></div>
             <div class="step" data-step="4"><span class="step-number">4</span><div><b>查看结果</b><span>导出或继续操作</span></div></div>
           </div>
           <div class="work-grid">
@@ -392,7 +455,7 @@ function resultHtml(tool, fileNames) {
   return `
     <div class="result-toolbar"><div><h2>${result.title}</h2><p>${result.subtitle}</p></div><div class="result-actions">${tool.actions.map((action, index) => `<button class="btn ${index === 0 ? "primary" : ""}" data-result-action="${escapeHtml(action)}">${action}</button>`).join("")}</div></div>
     <div class="stat-grid">${result.stats.map(item => `<div class="stat"><strong>${item[0]}</strong><span>${item[1]}</span></div>`).join("")}</div>
-    <section class="result-section"><div class="result-section-head"><h3>AI 结论</h3><span class="tag green">已完成</span></div><div class="result-section-body"><p class="result-summary">${result.summary}</p></div></section>
+    <section class="result-section"><div class="result-section-head"><h3>处理结论</h3><span class="tag green">已完成</span></div><div class="result-section-body"><p class="result-summary">${result.summary}</p></div></section>
     <section class="result-section"><div class="result-section-head"><h3>关键发现</h3><span class="tag">${result.findings.length} 项</span></div><div class="result-section-body"><div class="finding-list">${findings}</div></div></section>
     <section class="result-section"><div class="result-section-head"><h3>结构化结果</h3><button class="btn small" data-export="csv">导出表格</button></div><div class="result-section-body" style="padding:0; overflow-x:auto;">${table}</div></section>
     <section class="result-section"><div class="result-section-head"><h3>来源与审计</h3><span class="tag blue">仅使用有权限文件</span></div><div class="result-section-body"><div class="citation-list">${result.citations.map(item => `<div class="citation">${item}</div>`).join("")}</div><p class="helper" style="margin:10px 0 0;">本次输入：${fileNames.map(escapeHtml).join("、")}</p></div></section>
@@ -567,21 +630,110 @@ function openModal(title, body, confirmText = "确认", onConfirm) {
   backdrop.querySelectorAll("[data-close-modal]").forEach(button => button.onclick = () => backdrop.classList.remove("open"));
 }
 
+function renderPriorityToolCard(id, index) {
+  const item = TOOLS[id];
+  const meta = WORKBENCH_META[id];
+  return `<a class="priority-tool-card hub-tool-card" data-category="${meta.category}" href="${item.file}">
+    <div class="priority-card-head"><span class="priority-index">优先验证</span><span class="priority-badge">P0</span></div>
+    <div class="priority-title"><span class="tool-card-icon">${item.icon}</span><div><h3>${item.name}</h3><span>${meta.categoryLabel}</span></div></div>
+    <p class="priority-outcome">${meta.outcome}</p>
+    <div class="priority-flow">${meta.flow.map(step => `<span>${step}</span>`).join("")}</div>
+    <div class="priority-trust">${meta.trust.map(label => `<span><i data-lucide="badge-check"></i>${label}</span>`).join("")}</div>
+    <div class="priority-card-action"><span>进入工作台</span><i data-lucide="arrow-right"></i></div>
+  </a>`;
+}
+
+function renderWorkflowCard(id) {
+  const item = TOOLS[id];
+  const meta = WORKBENCH_META[id];
+  return `<a class="workflow-card hub-tool-card" data-category="${meta.category}" href="${item.file}">
+    <div class="workflow-card-top"><span class="tool-card-icon">${item.icon}</span><span class="workflow-stage">${meta.stage}</span></div>
+    <h3>${item.name}</h3>
+    <p>${meta.outcome}</p>
+    <div class="workflow-meta">${item.tags.slice(0, 2).map(tag => `<span>${tag}</span>`).join("")}</div>
+    <div class="workflow-card-action"><span>${meta.categoryLabel}</span><i data-lucide="arrow-right"></i></div>
+  </a>`;
+}
+
+function renderHubTaskLayer() {
+  return `<div class="hub-task-layer" data-task-layer aria-hidden="true">
+    <button class="hub-task-scrim" type="button" data-hub-action="close-tasks" aria-label="关闭任务中心"></button>
+    <aside class="hub-task-drawer" aria-label="任务中心">
+      <header class="hub-task-head"><div><h2>任务中心</h2><p>跨工具查看处理中、待复核和已完成结果</p></div><button type="button" data-hub-action="close-tasks" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="hub-task-summary"><span><strong>1</strong>处理中</span><span><strong>1</strong>待复核</span><span><strong>12</strong>本周完成</span></div>
+      <div class="hub-task-list">
+        <a class="hub-task-item" href="folder-summary.html"><span class="hub-task-icon"><i data-lucide="folder-search"></i></span><span><strong>春季招生项目摘要</strong><p>正在核对 18 份文件的来源与变化</p></span><span class="hub-task-state">72%</span><span class="hub-task-progress"><i style="width:72%"></i></span></a>
+        <a class="hub-task-item" href="invoice-check.html"><span class="hub-task-icon"><i data-lucide="receipt-text"></i></span><span><strong>7 月 11 日报销批次</strong><p>3 张票据存在重复、金额或材料异常</p></span><span class="hub-task-state review">待复核</span></a>
+        <a class="hub-task-item" href="multi-file-qa.html"><span class="hub-task-icon"><i data-lucide="messages-square"></i></span><span><strong>招生渠道方案对比</strong><p>已生成简报并保存到原项目文件夹</p></span><span class="hub-task-state done">已回存</span></a>
+      </div>
+    </aside>
+  </div>`;
+}
+
+function bindHubInteractions() {
+  const cards = [...document.querySelectorAll(".hub-tool-card")];
+  const p0Section = document.querySelector('[data-hub-section="p0"]');
+  const workflowEmpty = document.querySelector("[data-workflow-empty]");
+  document.querySelectorAll("[data-hub-filter]").forEach(button => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.hubFilter;
+      document.querySelectorAll("[data-hub-filter]").forEach(item => item.classList.toggle("active", item === button));
+      cards.forEach(card => { card.hidden = filter !== "all" && card.dataset.category !== filter; });
+      p0Section.hidden = !p0Section.querySelector(".hub-tool-card:not([hidden])");
+      workflowEmpty.hidden = Boolean(document.querySelector('[data-hub-section="workflow"] .hub-tool-card:not([hidden])'));
+    });
+  });
+
+  const taskLayer = document.querySelector("[data-task-layer]");
+  const setTaskLayer = open => {
+    taskLayer.classList.toggle("open", open);
+    taskLayer.setAttribute("aria-hidden", String(!open));
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+  document.querySelectorAll('[data-hub-action="tasks"]').forEach(button => button.addEventListener("click", () => setTaskLayer(true)));
+  document.querySelectorAll('[data-hub-action="close-tasks"]').forEach(button => button.addEventListener("click", () => setTaskLayer(false)));
+  document.addEventListener("keydown", event => { if (event.key === "Escape") setTaskLayer(false); });
+}
+
 function renderHub() {
-  document.title = "AI 工具中心 · 360 云盘";
+  document.title = "360 AI 文件工作台 · 360 云盘";
   document.body.innerHTML = `
     <div class="app-shell">
       ${renderProductSidebar()}
       <main class="main">
-        <header class="topbar"><div class="breadcrumb"><strong>AI 工具中心</strong></div>${primaryNav("experience")}<div class="top-actions"><button class="btn">使用记录</button><a class="btn primary" href="folder-summary.html">开始体验</a></div></header>
+        <header class="topbar"><div class="breadcrumb"><strong>360 AI 文件工作台</strong></div>${primaryNav("experience")}<div class="top-actions"><button class="btn hub-task-trigger" type="button" data-hub-action="tasks" aria-label="打开任务中心"><i data-lucide="list-checks"></i><span>任务中心</span></button><a class="btn primary" href="folder-summary.html"><i data-lucide="folder-input"></i>从文件开始</a></div></header>
         <div class="hub-content">
-          <div class="demo-banner"><strong>老板体验入口</strong><span>8 个工具均可独立打开，支持上传、加载样例、处理进度、结果预览和导出操作。</span></div>
-          <section class="hub-hero"><div><h1>基于云盘文件的 AI 工具</h1><p>让用户已有文件直接变成可总结、可问答、可核验、可审阅、可整理和可沉淀的生产力资产。</p></div><div class="hub-metrics"><div class="hub-metric"><strong>8</strong><span>可体验工具</span></div><div class="hub-metric"><strong>3</strong><span>行业商业包</span></div><div class="hub-metric"><strong>100%</strong><span>独立操作流程</span></div></div></section>
-          <div class="tool-card-grid">${TOOL_ORDER.map(id => { const item = TOOLS[id]; return `<a class="tool-card" href="${item.file}"><div class="tool-card-top"><span class="tool-card-icon">${item.icon}</span><span class="tag purple">${item.tier}</span></div><h2>${item.name}</h2><p>${item.desc}</p><div class="tool-card-tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div><div class="tool-card-foot"><span>打开体验</span><span>→</span></div></a>`; }).join("")}</div>
+          <section class="hub-intro" data-screen-label="文件工作台首页">
+            <div><h1>让云盘里的文件，直接变成可信工作结果</h1><p>在原有权限范围内完成理解、核验、审阅与沉淀；每个结论可查看来源，高风险动作由人确认，结果可回存原位置。</p></div>
+            <div class="hub-value-points"><span><i data-lucide="shield-check"></i>权限不外溢</span><span><i data-lucide="quote"></i>结论可追溯</span><span><i data-lucide="user-check"></i>关键动作可复核</span></div>
+          </section>
+
+          <section class="current-context" aria-label="从当前文件夹开始">
+            <div class="current-context-main"><span class="context-folder-mark"><i data-lucide="folder-open"></i></span><span><small>从当前文件夹开始</small><strong>春季招生项目</strong><p>企业云盘 / 市场部 · 今天 09:42 更新</p></span></div>
+            <div class="current-context-summary"><span><strong>18</strong>文件</span><span><strong>5</strong>子文件夹</span><span><strong>100%</strong>权限可见</span></div>
+            <div class="context-actions">
+              <a class="context-action" href="folder-summary.html"><i data-lucide="folder-search"></i><span><strong>生成项目速览</strong><small>重点、待办与风险</small></span></a>
+              <a class="context-action" href="multi-file-qa.html"><i data-lucide="messages-square"></i><span><strong>问这些文件</strong><small>引用原文回答</small></span></a>
+              <a class="context-action" href="knowledge-import.html"><i data-lucide="database-zap"></i><span><strong>筛选可入库资料</strong><small>权限与重复检查</small></span></a>
+            </div>
+          </section>
+
+          <section class="hub-section" data-hub-section="p0">
+            <div class="hub-section-heading"><div><h2>首期推荐</h2><p>3 个 P0 工具先验证高频使用、可信结果和企业付费。</p></div><span>共享权限、证据、任务与审计能力</span></div>
+            <div class="p0-grid">${TRUSTED_P0.map(renderPriorityToolCard).join("")}</div>
+          </section>
+
+          <section class="hub-section" data-hub-section="workflow">
+            <div class="hub-section-heading"><div><h2>行业工作流</h2><p>8 个方向完整保留，按验证顺序逐步生产化。</p></div><div class="hub-filter" aria-label="筛选工具"><button class="hub-filter-button active" data-hub-filter="all">全部</button><button class="hub-filter-button" data-hub-filter="common">通用</button><button class="hub-filter-button" data-hub-filter="finance">财务</button><button class="hub-filter-button" data-hub-filter="legal">法务</button><button class="hub-filter-button" data-hub-filter="education">教育</button><button class="hub-filter-button" data-hub-filter="governance">知识治理</button></div></div>
+            <div class="workflow-grid">${TOOL_ORDER.filter(id => !TRUSTED_P0.includes(id)).map(renderWorkflowCard).join("")}</div>
+            <div class="workflow-empty" data-workflow-empty hidden>该场景的首期工具已在上方展示。</div>
+          </section>
         </div>
       </main>
-    </div>`;
+    </div>
+    ${renderHubTaskLayer()}`;
   refreshProductIcons();
+  bindHubInteractions();
 }
 
 function commonSidebar() {
@@ -596,18 +748,18 @@ function renderReport() {
       <main class="main">
         <header class="topbar"><div class="breadcrumb"><strong>AI 工具调研报告</strong></div>${primaryNav("report")}<div class="top-actions"><button class="btn" id="printReport">打印报告</button><a class="btn primary" href="index.html">进入工具体验</a></div></header>
         <div class="report-content">
-          <div class="demo-banner"><strong>汇报版报告</strong><span>从市场机会、场景优先级、工具规划、商业化和 MVP 路线解释为什么要补齐这 8 个工具。</span></div>
+          <div class="demo-banner"><strong>自动评审修订版</strong><span>8 个方向作为产品地图完整保留，生产 MVP 收敛为 3 个 P0 工具与共享可信底座。</span></div>
           <section class="report-hero">
             <div class="report-lead">
-              <span class="report-kicker">场景调研结论 · 2026-07-09</span>
-              <h1>云盘 AI 工具商业化场景调研</h1>
-              <p>围绕 B 端办公、律师、教育与财务用户，评估基于文件的 AI 处理机会。核心判断标准是：场景是否高频、是否依赖云盘资产、是否形成可解释的付费价值。</p>
-              <div class="report-conclusion"><strong>核心结论：</strong>第一期应优先做文件处理与垂直行业工作流，把“存文件”升级为“总结、问答、核验、审阅、整理和沉淀”。外部信息采集类工具适合后续探索。</div>
+              <span class="report-kicker">Autoplan 评审结论 · 2026-07-13</span>
+              <h1>云盘可信文件工作台商业化方案</h1>
+              <p>产品不再以“增加多少 AI 工具”为目标，而是让已有文件在原权限范围内变成可核验、可交付、可沉淀的工作成果。</p>
+              <div class="report-conclusion"><strong>核心结论：</strong>首期聚焦文件夹摘要、多文件问答与财务票据核验。三者共享权限、证据、规则、人工复核、任务审计和结果回存能力；法律、知识治理和教育场景按试点数据扩展。</div>
             </div>
             <div class="report-scoreboard">
-              <div class="score-cell"><strong>8</strong><span>首批推荐工具</span></div>
-              <div class="score-cell"><strong>3</strong><span>行业商业包：财务/法务/教育</span></div>
-              <div class="score-cell"><strong>P0</strong><span>文件处理与行业场景</span></div>
+              <div class="score-cell"><strong>3</strong><span>首期 P0 工具</span></div>
+              <div class="score-cell"><strong>1</strong><span>共享可信底座</span></div>
+              <div class="score-cell"><strong>8</strong><span>完整产品方向</span></div>
               <div class="score-cell"><strong>P2</strong><span>外部信息采集与社媒洞察</span></div>
             </div>
           </section>
@@ -616,12 +768,11 @@ function renderReport() {
             <div class="report-section-head"><div><h2>场景优先级</h2><p>按商业化潜力、云盘关联度与实施难度综合判断</p></div><span class="tag blue">建议顺序</span></div>
             <div class="report-section-body" style="padding:0; overflow-x:auto;">
               <table class="report-table"><thead><tr><th>优先级</th><th>场景方向</th><th>推荐能力</th><th>商业化潜力</th><th>云盘关联</th><th>建议</th></tr></thead><tbody>
-                <tr><td><span class="tag red">P0</span></td><td>财务票据处理</td><td>OCR、字段匹配、报销核验、异常检测</td><td>高</td><td>高</td><td>第一批上线</td></tr>
-                <tr><td><span class="tag red">P0</span></td><td>合同与法律文档</td><td>风险审阅、版本对比、条款提取</td><td>高</td><td>高</td><td>先做辅助审阅</td></tr>
-                <tr><td><span class="tag red">P0</span></td><td>教育资料</td><td>课件整理、教案生成、课程资料包</td><td>高</td><td>高</td><td>教育行业包</td></tr>
-                <tr><td><span class="tag red">P0</span></td><td>通用云盘处理</td><td>文件夹摘要、多文件问答、知识入库</td><td>高</td><td>极高</td><td>作为能力底座</td></tr>
-                <tr><td><span class="tag orange">P1</span></td><td>企业办公流转</td><td>会议资料包、审批材料检查、项目整理</td><td>中高</td><td>高</td><td>第二批建设</td></tr>
-                <tr><td><span class="tag">P2</span></td><td>外部信息获取</td><td>社媒洞察、竞品监控、政策资讯</td><td>中</td><td>中</td><td>合规方式探索</td></tr>
+                <tr><td><span class="tag red">P0</span></td><td>通用可信处理</td><td>文件夹摘要、多文件问答</td><td>高</td><td>极高</td><td>高频入口与能力底座</td></tr>
+                <tr><td><span class="tag red">P0</span></td><td>财务票据核验</td><td>OCR、材料匹配、规则核验、异常分流</td><td>极高</td><td>高</td><td>首个付费验证场景</td></tr>
+                <tr><td><span class="tag orange">P1</span></td><td>合同与知识治理</td><td>风险审阅、版本对比、知识入库</td><td>高</td><td>高</td><td>复用可信底座扩展</td></tr>
+                <tr><td><span class="tag">P2</span></td><td>教育资料</td><td>课件整理、教案生成、课程资料包</td><td>中高</td><td>高</td><td>按教育试点数据立项</td></tr>
+                <tr><td><span class="tag">P2</span></td><td>外部信息获取</td><td>社媒洞察、竞品监控、政策资讯</td><td>中</td><td>中</td><td>仅通过合规连接器探索</td></tr>
               </tbody></table>
             </div>
           </section>
@@ -636,11 +787,11 @@ function renderReport() {
           </section>
 
           <section class="report-section">
-            <div class="report-section-head"><div><h2>首批 8 个工具</h2><p>通用云盘底座 + 三个行业场景</p></div><a class="btn small primary" href="index.html">查看可用原型</a></div>
+            <div class="report-section-head"><div><h2>8 个产品方向与上线顺序</h2><p>完整展示产品地图，生产范围按可信度与商业验证分期</p></div><a class="btn small primary" href="index.html">查看可用原型</a></div>
             <div class="report-section-body"><div class="roadmap">
-              <div class="roadmap-phase"><span class="tag blue">通用云盘底座</span><b>先建立跨场景能力</b><p>解决所有文件用户都会遇到的理解、检索和沉淀问题。</p><div class="roadmap-tools"><span class="tag">文件夹智能摘要</span><span class="tag">多文件问答</span><span class="tag">知识库一键入库</span></div></div>
-              <div class="roadmap-phase"><span class="tag green">强商业化行业包</span><b>财务与法务</b><p>围绕准确核验、风险发现和人工复核形成企业付费价值。</p><div class="roadmap-tools"><span class="tag">财务票据核验</span><span class="tag">合同风险审阅</span><span class="tag">版本对比</span></div></div>
-              <div class="roadmap-phase"><span class="tag purple">教育行业包</span><b>资料加工与教学产出</b><p>利用已有课件直接生成可复用课程资产。</p><div class="roadmap-tools"><span class="tag">课件整理</span><span class="tag">教案生成</span></div></div>
+              <div class="roadmap-phase"><span class="tag blue">P0 · 6-8 周</span><b>3 个 P0 + 共享可信底座</b><p>验证高频使用、结果可信和首个企业付费闭环。</p><div class="roadmap-tools"><span class="tag">文件夹智能摘要</span><span class="tag">多文件问答</span><span class="tag">财务票据核验</span></div></div>
+              <div class="roadmap-phase"><span class="tag green">P1 · 企业扩展</span><b>法务协作与知识治理</b><p>复用证据、规则、人工复核和审计能力。</p><div class="roadmap-tools"><span class="tag">合同风险审阅</span><span class="tag">版本对比</span><span class="tag">知识库一键入库</span></div></div>
+              <div class="roadmap-phase"><span class="tag purple">P2 · 行业验证</span><b>教育资料与教学产出</b><p>依据教育客户试点数据验证组织级采购价值。</p><div class="roadmap-tools"><span class="tag">课件整理</span><span class="tag">教案生成</span></div></div>
             </div></div>
           </section>
 

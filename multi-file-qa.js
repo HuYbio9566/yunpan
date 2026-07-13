@@ -265,10 +265,10 @@ function layout(content) {
       ${renderProductSidebar()}
       <main class="main">
         <header class="topbar">
-          <div class="breadcrumb"><a href="index.html">AI 工具中心</a><span>/</span><strong>多文件问答</strong></div>
+          <div class="breadcrumb"><a href="index.html">AI 文件工作台</a><span>/</span><strong>多文件问答</strong></div>
           <nav class="primary-nav" aria-label="全局导航">
             <a class="primary-nav-link" href="report.html">调研报告</a>
-            <a class="primary-nav-link active" href="index.html">新增工具</a>
+            <a class="primary-nav-link active" href="index.html">工具体验</a>
             <a class="primary-nav-link" href="existing-tools.html">已有工具</a>
           </nav>
           <div class="top-actions">
@@ -276,6 +276,16 @@ function layout(content) {
             <button class="btn" data-action="toast" data-toast="帮助说明已打开">使用帮助</button>
           </div>
         </header>
+        ${renderWorkbenchContextBar({
+          label: "当前来源范围",
+          context: `春季招生决策资料 · ${state.selectedSourceIds.length} 份文件`,
+          items: [
+            { icon: "shield-check", label: "权限已校验", state: "verified" },
+            { icon: "scan-text", label: "仅检索已选来源", state: "verified" },
+            { icon: "quote", label: "回答精确引用", state: "ready" },
+            { icon: "file-output", label: "可生成交付物", state: "ready" }
+          ]
+        })}
         ${content}
       </main>
     </div>
@@ -289,9 +299,8 @@ function renderEntry() {
     <section class="qa-entry">
       <header class="qa-entry-header">
         <div class="qa-entry-copy">
-          <p class="qa-eyebrow">多文件问答</p>
-          <h1>先建立来源范围，再开始有依据的回答</h1>
-          <p>AI 只检索你明确勾选且有权限的云盘文件，每个事实性结论都能定位到原文。</p>
+        <h1>先建立来源范围，再开始有依据的回答</h1>
+          <p>仅检索你明确勾选且有权限的云盘文件，每个事实性结论都能定位到原文。</p>
         </div>
         <div class="entry-health" aria-label="来源状态">
           <span><i data-lucide="shield-check"></i>权限已校验</span>
@@ -520,7 +529,7 @@ function renderDeliverable() {
         <div class="deliverable-icon"><i data-lucide="file-check-2"></i></div>
         <h2>生成${product.title}</h2><p>${product.description}</p>
         <label>文件名称<input value="春季招生项目-${product.title}"></label>
-        <label>保存到<div class="save-target"><i data-lucide="folder"></i>企业云盘 / 市场部 / 招生增长 / AI 产物</div></label>
+        <label>保存到<div class="save-target"><i data-lucide="folder"></i>企业云盘 / 市场部 / 招生增长 / 分析结果</div></label>
         <div class="deliverable-preview"><span>输出格式</span><strong>${product.format}</strong><span>保留引用</span><strong>是 · 6 条来源</strong></div>
         <div class="modal-actions"><button class="btn" data-action="close-deliverable">取消</button><button class="btn primary" data-action="save-deliverable">生成并保存</button></div>
       </section>

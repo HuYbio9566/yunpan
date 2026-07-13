@@ -506,8 +506,8 @@ function resolvePermissionRecovery(action, currentStatus = "waiting") {
   }
   return {
     status: "waiting",
-    label: "AI 无法读取该文件，但不会阻断其他文件。",
-    detail: "AI 无法读取该文件，但不会阻断其他文件。",
+    label: "系统无法读取该文件，但不会阻断其他文件。",
+    detail: "系统无法读取该文件，但不会阻断其他文件。",
     continueScanning: false
   };
 }
@@ -554,10 +554,10 @@ function layout(content) {
       ${renderProductSidebar()}
       <main class="main">
         <header class="topbar">
-          <div class="breadcrumb"><a href="index.html">AI 工具中心</a><span>/</span><strong>文件夹智能摘要</strong></div>
+          <div class="breadcrumb"><a href="index.html">AI 文件工作台</a><span>/</span><strong>文件夹智能摘要</strong></div>
           <nav class="primary-nav" aria-label="全局导航">
             <a class="primary-nav-link" href="report.html">调研报告</a>
-            <a class="primary-nav-link active" href="index.html">新增工具</a>
+            <a class="primary-nav-link active" href="index.html">工具体验</a>
             <a class="primary-nav-link" href="existing-tools.html">已有工具</a>
           </nav>
           <div class="top-actions">
@@ -565,6 +565,17 @@ function layout(content) {
             <button class="btn" type="button" data-action="show-toast" data-toast="帮助已准备好">使用帮助</button>
           </div>
         </header>
+        ${renderWorkbenchContextBar({
+          label: "",
+          context: "春季招生项目",
+          contextIcon: "folder-open",
+          items: [
+            { icon: "shield-check", label: "继承原权限", state: "verified" },
+            { icon: "quote", label: "结论带来源", state: "verified" },
+            { icon: "refresh-cw", label: "支持增量更新", state: "ready" },
+            { icon: "folder-output", label: "回存原文件夹", state: "ready" }
+          ]
+        })}
         ${content}
       </main>
     </div>
@@ -598,7 +609,6 @@ function renderEntry() {
     <section class="fs-entry">
       <div class="entry-hero">
         <div>
-          <p class="eyebrow">文件夹分析驾驶舱</p>
           <h1>选择云盘文件夹，生成可追溯的项目概览</h1>
           <p class="hero-copy">按目录覆盖率、来源证据和业务动作组织结果，适合不断更新的项目资料夹。</p>
           <div class="hero-actions">
@@ -607,8 +617,13 @@ function renderEntry() {
           </div>
         </div>
         <div class="folder-preview">
-          <div class="preview-title">最近覆盖</div>
-          <div class="preview-meter"><span style="width: 86%"></span></div>
+          <div class="preview-head">
+            <span class="preview-title">最近覆盖</span>
+            <div class="preview-meter" role="progressbar" aria-label="目录覆盖率" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100">
+              <span style="width: 86%"></span>
+            </div>
+            <strong>86%</strong>
+          </div>
           <div class="preview-grid">
             <span><strong>18</strong> 文件</span>
             <span><strong>5</strong> 子文件夹</span>
@@ -1088,7 +1103,7 @@ function renderModal() {
       <div class="modal-backdrop" data-action="close-modal">
         <section class="business-modal" role="dialog" aria-modal="true" aria-label="创建待办" data-stop-close>
           <div class="modal-head">
-            <div><h2>创建待办</h2><p>把 AI 识别出的事项提交到协作任务。</p></div>
+            <div><h2>创建待办</h2><p>把识别出的事项提交到协作任务。</p></div>
             <button class="icon-btn" type="button" data-action="close-modal" aria-label="关闭"><i data-lucide="x"></i></button>
           </div>
           <div class="modal-body">

@@ -31,6 +31,16 @@ test("existing tools home links to all 14 standalone experiences", () => {
   }
 });
 
+test("all existing tool pages reuse the shared product sidebar", () => {
+  const pages = ["existing-tools.html", ...expectedPages];
+  for (const page of pages) {
+    const source = fs.readFileSync(path.join(root, page), "utf8");
+    assert.ok(source.includes("product-sidebar.js"), `${page} should load the shared sidebar`);
+  }
+  const runtime = fs.readFileSync(path.join(root, "existing-app.js"), "utf8");
+  assert.match(runtime, /function legacySidebar\(\) \{\s*return renderProductSidebar\(\);\s*\}/);
+});
+
 test("shared runtime includes the researched workflows and states", () => {
   const source = fs.readFileSync(path.join(root, "existing-app.js"), "utf8");
   for (const phrase of [

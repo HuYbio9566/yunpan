@@ -286,10 +286,20 @@ function layout(content) {
       ${renderProductSidebar()}
       <main class="main">
         <header class="topbar">
-          <div class="breadcrumb"><a href="index.html">AI 工具中心</a><span>/</span><strong>财务票据核验</strong></div>
-          <nav class="primary-nav" aria-label="全局导航"><a class="primary-nav-link" href="report.html">调研报告</a><a class="primary-nav-link active" href="index.html">新增工具</a><a class="primary-nav-link" href="existing-tools.html">已有工具</a></nav>
+          <div class="breadcrumb"><a href="index.html">AI 文件工作台</a><span>/</span><strong>财务票据核验</strong></div>
+          <nav class="primary-nav" aria-label="全局导航"><a class="primary-nav-link" href="report.html">调研报告</a><a class="primary-nav-link active" href="index.html">工具体验</a><a class="primary-nav-link" href="existing-tools.html">已有工具</a></nav>
           <div class="top-actions"><button class="btn" data-action="toast" data-toast="已打开批次记录">使用记录</button><button class="btn" data-action="toast" data-toast="核验规则说明已打开">使用帮助</button></div>
         </header>
+        ${renderWorkbenchContextBar({
+          label: "当前财务规则",
+          context: "企业标准规则集 / 2026-07-11",
+          items: [
+            { icon: "shield-check", label: "规则版本已锁定", state: "verified" },
+            { icon: "scan-line", label: "OCR 字段可复核", state: "ready" },
+            { icon: "user-check", label: "异常人工确认", state: "attention" },
+            { icon: "clipboard-check", label: "审核动作留痕", state: "ready" }
+          ]
+        })}
         ${content}
       </main>
     </div>
@@ -304,7 +314,7 @@ function renderEntry() {
   return `
     <section class="invoice-entry">
       <div class="invoice-hero">
-        <div><p class="invoice-eyebrow">异常驱动财务审核台</p><h1>批量识别票据，只把异常交给财务人员</h1><p>自动完成 OCR、企业规则校验与材料匹配；人工重点处理低置信度、重复和金额异常。</p><div class="hero-actions"><button class="btn primary" data-action="open-import"><i data-lucide="upload-cloud"></i>新建核验批次</button><button class="btn" data-action="load-batch"><i data-lucide="play"></i>体验示例批次</button></div></div>
+        <div><h1>批量识别票据，只把异常交给财务人员</h1><p>自动完成 OCR、企业规则校验与材料匹配；人工重点处理低置信度、重复和金额异常。</p><div class="hero-actions"><button class="btn primary" data-action="open-import"><i data-lucide="upload-cloud"></i>新建核验批次</button><button class="btn" data-action="load-batch"><i data-lucide="play"></i>体验示例批次</button></div></div>
         <div class="batch-overview"><div><span>本月自动通过率</span><strong>78.4%</strong><small>较上月 +6.2%</small></div><div class="overview-track"><span style="width:78.4%"></span></div><p><i data-lucide="shield-check"></i>企业标准规则集 · 07-11 更新</p></div>
       </div>
       <section class="invoice-section">
@@ -433,7 +443,40 @@ function renderMatches(invoice) {
 }
 
 function renderImportModal() {
-  return `<div class="modal-layer" data-action="close-import"><section class="import-modal" role="dialog" aria-modal="true" data-stop-close><div class="modal-head"><div><p class="invoice-eyebrow">新建核验批次</p><h2>导入票据与报销材料</h2></div><button class="icon-button" data-action="close-import"><i data-lucide="x"></i></button></div><div class="import-drop"><i data-lucide="cloud-upload"></i><h3>拖入文件，或从云盘选择</h3><p>支持 PDF、JPG、PNG、Excel、Word，可批量识别压缩包</p><div><button class="btn">本地上传</button><button class="btn primary">从云盘选择</button></div></div><div class="import-options"><label><span>核验任务</span><select><option>${state.mode === "three-way" ? "合同/订单/发票匹配" : state.mode === "recognition" ? "票据字段识别" : "报销材料核验"}</option></select></label><label><span>企业规则</span><select><option>企业标准规则（推荐）</option><option>严格核验</option></select></label><label class="switch-row"><span><strong>自动通过无异常票据</strong><small>仅保留异常进入人工队列</small></span><input type="checkbox" checked></label></div><div class="modal-actions"><button class="btn" data-action="close-import">取消</button><button class="btn primary" data-action="load-batch">加载示例并开始</button></div></section></div>`;
+  const task = state.mode === "three-way" ? "合同/订单/发票匹配" : state.mode === "recognition" ? "票据字段识别" : "报销材料核验";
+  return `<div class="modal-layer" data-action="close-import">
+    <section class="import-modal" role="dialog" aria-modal="true" aria-labelledby="import-modal-title" data-stop-close>
+      <header class="modal-head import-modal-head">
+        <div>
+          <h2 id="import-modal-title">导入核验材料</h2>
+          <p>导入票据、报销单和支付凭证，按企业规则完成批量核验。</p>
+        </div>
+        <button class="icon-button" type="button" aria-label="关闭" data-action="close-import"><i data-lucide="x"></i></button>
+      </header>
+      <div class="import-modal-body">
+        <div class="import-drop">
+          <span class="import-drop-icon"><i data-lucide="cloud-upload"></i></span>
+          <div class="import-drop-copy">
+            <h3>拖入文件，或从云盘选择</h3>
+            <p>PDF、图片、Excel、Word 或压缩包</p>
+          </div>
+          <div class="import-drop-actions">
+            <button class="btn" type="button">本地上传</button>
+            <button class="btn primary" type="button">从云盘选择</button>
+          </div>
+        </div>
+        <div class="import-options">
+          <label><span>核验任务</span><select><option>${task}</option></select></label>
+          <label><span>企业规则</span><select><option>企业标准规则（推荐）</option><option>严格核验</option></select></label>
+          <label class="switch-row"><span><strong>自动通过无异常票据</strong><small>仅将异常票据加入人工队列</small></span><input type="checkbox" checked></label>
+        </div>
+      </div>
+      <footer class="modal-actions import-modal-actions">
+        <button class="btn" type="button" data-action="close-import">取消</button>
+        <button class="btn primary" type="button" data-action="load-batch">使用示例开始核验</button>
+      </footer>
+    </section>
+  </div>`;
 }
 
 function renderBusinessModal() {

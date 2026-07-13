@@ -122,6 +122,19 @@ body[data-page="contract-review"] {
   color: var(--body);
 }
 
+.selected-contract > .icon-button {
+  width: 28px;
+  height: 28px;
+  justify-self: end;
+  align-self: center;
+  padding: 0;
+}
+
+.selected-contract > .icon-button :is(i, svg) {
+  width: 14px;
+  height: 14px;
+}
+
 .contract-meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -233,6 +246,27 @@ body[data-page="contract-review"] {
   color: var(--ink);
 }
 
+.select-control {
+  position: relative;
+}
+
+.select-control select {
+  width: 100%;
+  appearance: none;
+  padding-right: 42px;
+}
+
+.select-control > :is(i, svg) {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  color: var(--body);
+  pointer-events: none;
+}
+
 .segmented {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -265,9 +299,15 @@ body[data-page="contract-review"] {
   border: 1px solid var(--line);
   border-radius: 7px;
   background: #fff;
-  padding: 10px;
+  padding: 10px 14px 10px 10px;
   color: var(--body);
   text-align: left;
+}
+
+.playbook-select > :is(i, svg) {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
 }
 
 .playbook-select > span {
@@ -336,6 +376,10 @@ body[data-page="contract-review"] {
 
 .section-head {
   margin-bottom: 11px;
+}
+
+.recent-contracts .section-head p {
+  margin-top: 2px;
 }
 
 .section-head > button,
