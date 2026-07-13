@@ -2,9 +2,10 @@
 
 360 AI 企业知识库云盘工具原型，包含调研报告、已有工具对照、新增 AI 工具及各工具独立交互页面。
 
-## Online Demo
+## Access
 
-- Tool center: https://huybio9566.github.io/yunpan/
-- Multi-file Q&A: https://huybio9566.github.io/yunpan/multi-file-qa.html
+This is a private repository. Authorized collaborators can access the source at:
 
-This repository is a static prototype and is published with GitHub Pages.
+https://github.com/HuYbio9566/yunpan
+
+To preview locally, serve the repository root with any static HTTP server and open `index.html`.
