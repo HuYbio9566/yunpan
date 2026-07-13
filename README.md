@@ -8,4 +8,9 @@ This is a private repository. Authorized collaborators can access the source at:
 
 https://github.com/HuYbio9566/yunpan
 
+Public prototype:
+
+- Tool center: https://yunpan-blush.vercel.app/
+- Multi-file Q&A: https://yunpan-blush.vercel.app/multi-file-qa.html
+
 To preview locally, serve the repository root with any static HTTP server and open `index.html`.
