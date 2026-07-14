@@ -38,6 +38,12 @@ test("shared trusted context is visible in every P0 workflow", () => {
   assert.doesNotMatch(folderSummary, /企业云盘 \/ 市场部 \/ 春季招生项目/);
 });
 
+test("desktop trust states align to the right edge of the context bar", () => {
+  const styles = read("styles.css");
+  assert.match(styles, /\.workbench-context-states\s*\{[\s\S]*justify-self:\s*end;[\s\S]*justify-content:\s*flex-end;/);
+  assert.match(styles, /@media \(max-width:\s*640px\)[\s\S]*\.workbench-context-states\s*\{[\s\S]*justify-self:\s*stretch;[\s\S]*justify-content:\s*flex-start;/);
+});
+
 test("report separates the product map from the production MVP", () => {
   const source = read("app.js");
   for (const phrase of ["3 个 P0", "共享可信底座", "财务票据核验", "多文件问答", "文件夹摘要"]) {
