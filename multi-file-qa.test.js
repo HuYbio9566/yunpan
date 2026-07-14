@@ -49,3 +49,12 @@ test("three-pane workspace collapses for narrow screens", () => {
   assert.match(css, /@media \(max-width:\s*760px\)/);
   assert.match(css, /\.qa-workspace\s*\{[\s\S]*grid-template-columns:\s*1fr/);
 });
+
+test("entry panel collapses source scope and anchors the composer below quiet shortcuts", () => {
+  const source = fs.readFileSync(path.join(root, "multi-file-qa.js"), "utf8");
+  assert.match(source, /<details class="launch-scope">[\s\S]*<summary class="launch-heading">/);
+  assert.ok(source.indexOf('class="quick-asks"') < source.indexOf('class="start-composer"'));
+  assert.match(css, /\.launch-panel\s*\{[\s\S]*display:\s*flex;[\s\S]*flex-direction:\s*column;/);
+  assert.match(css, /\.quick-asks\s*\{[\s\S]*margin-top:\s*auto;/);
+  assert.match(css, /\.quick-asks > button\s*\{[\s\S]*min-height:\s*26px;/);
+});

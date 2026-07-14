@@ -327,22 +327,27 @@ function renderEntry() {
           </footer>
         </section>
         <aside class="launch-panel">
-          <div class="launch-heading"><div><p class="qa-eyebrow">本次问答范围</p><h2>春季招生决策资料</h2></div><span class="source-count">${state.selectedSourceIds.length}</span></div>
-          <div class="launch-source-list">
-            ${state.selectedSourceIds.map(id => renderScopeSource(sourceById(id))).join("")}
-          </div>
+          <details class="launch-scope">
+            <summary class="launch-heading">
+              <div><p class="qa-eyebrow">本次问答范围</p><h2>春季招生决策资料</h2></div>
+              <span class="launch-heading-actions"><span class="source-count">${state.selectedSourceIds.length}</span><i class="scope-chevron" data-lucide="chevron-down"></i></span>
+            </summary>
+            <div class="launch-source-list">
+              ${state.selectedSourceIds.map(id => renderScopeSource(sourceById(id))).join("")}
+            </div>
+          </details>
           <div class="scope-policy">
             <strong>回答边界</strong>
             <span><i data-lucide="check"></i>仅使用已勾选来源</span>
             <span><i data-lucide="check"></i>回答前重新校验权限</span>
             <span><i data-lucide="check"></i>冲突结论不自动裁决</span>
           </div>
+          <div class="quick-asks" aria-label="常用任务">
+            ${PRESETS.slice(0, 3).map(item => `<button data-action="start-preset" data-preset="${item.id}" title="${item.prompt}"><i data-lucide="${item.icon}"></i><span>${item.title}</span></button>`).join("")}
+          </div>
           <div class="start-composer">
             <textarea id="entry-question" aria-label="输入问题" placeholder="例如：比较各渠道投入、到课表现和建议动作"></textarea>
             <div class="composer-foot"><span><i data-lucide="lock-keyhole"></i>检索 ${state.selectedSourceIds.length} 个来源</span><button class="send-btn" data-action="start-question" aria-label="开始提问"><i data-lucide="arrow-up"></i></button></div>
-          </div>
-          <div class="quick-asks" aria-label="常用任务">
-            ${PRESETS.slice(0, 3).map(item => `<button data-action="start-preset" data-preset="${item.id}"><i data-lucide="${item.icon}"></i><span><strong>${item.title}</strong><small>${item.prompt}</small></span></button>`).join("")}
           </div>
         </aside>
       </div>
